@@ -9,7 +9,7 @@ def lru_cache(*args, **kwargs):
     if len(args) == 1 and callable(args[0]) and not kwargs:
         return _make_wrapper(args[0], None)
 
-    maxsize = kwargs.get('maxsize', None)
+    maxsize = kwargs.get("maxsize", None)
 
     def decorator(func):
         return _make_wrapper(func, maxsize)
@@ -54,7 +54,7 @@ def multiply(a: int, b: int) -> int:
     return a * b
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     assert sum(1, 2) == 3
     assert sum(3, 4) == 7
 

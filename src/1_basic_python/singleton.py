@@ -1,5 +1,3 @@
-
-
 class SingletonMeta(type):
     _instances = {}
 
@@ -7,7 +5,6 @@ class SingletonMeta(type):
         if cls not in type(cls)._instances:
             type(cls)._instances[cls] = super().__call__(*args, **kwargs)
         return type(cls)._instances[cls]
-
 
 
 class Box(metaclass=SingletonMeta):
@@ -32,8 +29,9 @@ class SingletonNew:
 
     def __new__(cls, *args, **kwargs):
         if cls.__instance is None:
-            cls.__instance = super().__new__(cls) # or object.__new__(cls)
+            cls.__instance = super().__new__(cls)  # or object.__new__(cls)
         return cls.__instance
+
 
 class MadCar(SingletonNew):
     def __init__(self):
@@ -44,6 +42,7 @@ class MadCar(SingletonNew):
 
     def get_spares(self):
         return self.spares
+
 
 c = MadCar()
 d = MadCar()
@@ -61,6 +60,7 @@ class _SingletonWrapper:
         if self._instance is None:
             self._instance = self.__wrapped__(*args, **kwargs)
         return self._instance
+
 
 def singleton(cls):
     return _SingletonWrapper(cls)
