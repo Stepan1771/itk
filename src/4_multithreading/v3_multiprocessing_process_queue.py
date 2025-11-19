@@ -1,4 +1,4 @@
-from utils import generate_data, process_number, timer
+from utils import generate_data, process_number, timer_saver
 
 import multiprocessing
 
@@ -9,7 +9,7 @@ def worker(nums, queue):
         queue.put(result, block=False)  # Пытаемся добавить в очередь без блокировки
 
 
-@timer
+@timer_saver
 def multiprocessing_process(n):
     count_processes = multiprocessing.cpu_count()
     nums = generate_data(n)
@@ -36,7 +36,7 @@ def multiprocessing_process(n):
     while not queue.empty():
         results.append(queue.get())
 
-    return None
+    return n
 
 
 if __name__ == "__main__":

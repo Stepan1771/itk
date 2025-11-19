@@ -1,9 +1,9 @@
 import multiprocessing
 
-from utils import generate_data, process_number, timer
+from utils import generate_data, process_number, timer_saver
 
 
-@timer
+@timer_saver
 def multiprocessing_pool(
     n: int,
 ):
@@ -13,8 +13,8 @@ def multiprocessing_pool(
     with multiprocessing.Pool(processes=count_processes) as pool:
         pool.map(process_number, nums)
 
-    return None
+    return n
 
 
 if __name__ == "__main__":
-    multiprocessing_pool(n=1)
+    multiprocessing_pool(n=100)
