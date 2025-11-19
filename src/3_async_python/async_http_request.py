@@ -1,7 +1,8 @@
 import asyncio
-import aiohttp
 import json
-from typing import List, Dict
+from typing import Dict, List
+
+import aiohttp
 
 
 async def fetch_urls(

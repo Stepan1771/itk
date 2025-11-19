@@ -1,43 +1,48 @@
+import multiprocessing
+import queue
+
 from utils import generate_data, process_number, timer_saver
 
-import multiprocessing
 
-
-def worker(nums, queue):
+def worker(nums, result_queue):
+    chunk_results = []
     for num in nums:
         result = process_number(num)
-        queue.put(result, block=False)  # Пытаемся добавить в очередь без блокировки
+        chunk_results.append(result)
+    result_queue.put(chunk_results)
 
 
 @timer_saver
 def multiprocessing_process(n):
-    count_processes = multiprocessing.cpu_count()
     nums = generate_data(n)
-    queue = multiprocessing.Queue()
+    count_processes = min(multiprocessing.cpu_count(), len(nums))
 
     chunk_size = len(nums) // count_processes
+    chunks = [nums[i : i + chunk_size] for i in range(0, len(nums), chunk_size)]
+
     processes = []
+    result_queue = multiprocessing.Queue()
 
-    for i in range(count_processes):
-        start_index = i * chunk_size
-        end_index = (
-            (i + 1) * chunk_size if i < (count_processes - 1) else len(nums)
-        )  # Последний процесс берет остаток
-        chunk = nums[start_index:end_index]
-
-        process = multiprocessing.Process(target=worker, args=(chunk, queue))
+    for chunk in chunks:
+        process = multiprocessing.Process(target=worker, args=(chunk, result_queue))
         process.start()
         processes.append(process)
 
-    for process in processes:
-        process.join()
-
     results = []
-    while not queue.empty():
-        results.append(queue.get())
+    for _ in range(len(chunks)):
+        try:
+            chunk_results = result_queue.get(timeout=30)
+            results.extend(chunk_results)
+        except queue.Empty:
+            break
+
+    for process in processes:
+        process.join(timeout=5)
+        if process.is_alive():
+            process.terminate()
 
     return n
 
 
 if __name__ == "__main__":
-    multiprocessing_process(n=100)
+    multiprocessing_process(n=100000)

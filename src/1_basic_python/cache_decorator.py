@@ -1,7 +1,5 @@
 import unittest.mock
-
 from collections import OrderedDict
-
 from functools import wraps
 
 
