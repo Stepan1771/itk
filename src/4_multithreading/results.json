@@ -1,0 +1,17 @@
+[
+    {
+        "func": "threaded",
+        "n": 100000,
+        "time": 5.894015073776245
+    },
+    {
+        "func": "multiprocessing_pool",
+        "n": 100000,
+        "time": 3.974656105041504
+    },
+    {
+        "func": "multiprocessing_process",
+        "n": 100000,
+        "time": 3.799015998840332
+    }
+]
