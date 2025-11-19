@@ -1,3 +1,5 @@
+import json
+import os.path
 import time
 
 import random
@@ -5,11 +7,44 @@ import random
 from typing import List, Tuple
 
 
-def timer(func):
+def timer_saver(func):
     def wrapper(*args, **kwargs):
         start = time.time()
-        func(*args, **kwargs)
+        result = func(*args, **kwargs)
         result_time = time.time() - start
+
+        if not os.path.exists("results.json"):
+            with open("results.json", "w") as json_file:
+                json.dump(
+                    [
+                        {
+                            "func": func.__name__,
+                            "n": result,
+                            "time": result_time
+                        }
+                    ],
+                    json_file,
+                    indent=4,
+                )
+
+        else:
+            with open("results.json", 'r+') as json_file:
+                data = json.load(json_file)
+                data.append(
+                    {
+                        "func": func.__name__,
+                        "n": result,
+                        "time": result_time
+                    }
+                )
+                json_file.seek(0)
+                json.dump(
+                    data,
+                    json_file,
+                    indent=4,
+                )
+                json_file.truncate()
+
         print(f"Func: '{func.__name__}', time: {result_time}")
 
     return wrapper
