@@ -6,6 +6,7 @@ from v3_multiprocessing_process_queue import multiprocessing_process
 
 
 if __name__ == '__main__':
-    threaded(n=1000)
-    multiprocessing_pool(n=1000)
-    multiprocessing_process(n=1000)
+    n = 100
+    threaded(n=n)
+    multiprocessing_pool(n=n)
+    multiprocessing_process(n=n)
